@@ -6,6 +6,7 @@ def czt(x, m = None, w = None, a = None):
     """Calculate the Chirp-Z transform of an input vector x.
 
     Parameters:
+        x: time domain samples.
         m: The number of frequency domain samples in the result.
         a: The complex starting point (normally, a point on the complex unit circle).
         w: The complex ratio between points (normally, a point on the complex unix circle). Determines the frequency resolution.
@@ -29,6 +30,8 @@ def czt(x, m = None, w = None, a = None):
     while nfft < (m + n - 1):
         nfft += nfft
 
+    # Perform CZT.
+
     fxx = np.fft.fft(xx, nfft)
 
     ww = w ** w_exponents_2
@@ -39,7 +42,7 @@ def czt(x, m = None, w = None, a = None):
 
     yy = np.fft.ifft(fyy, nfft)
 
-    # select output
+    # Select output.
 
     yy = yy[n - 1 : m + n - 1]
 
@@ -48,10 +51,24 @@ def czt(x, m = None, w = None, a = None):
     return y
 
 
-def czt_range(x, m, fmin, fmax, fs):
-    """Calculate frequency domain samples for a frequency range [fmin .. fmax], assuming a sampling frequency fs."""
+def czt_range(x, m, fmin, fmax, fs=None):
+    """Calculate frequency domain samples for a frequency range [fmin .. fmax].
+    
+    This function provides an interface to the CZT functionality that covers most use cases.
 
-    w = np.exp(-(fmax - fmin) / ((m - 1) * fs) * 2 * np.pi * 1j)  # frequency step
-    a = np.exp(         fmin  / (          fs) * 2 * np.pi * 1j)  # first frequency
+    Parameters:
+        x: time domain samples.
+        m: The number of frequency domain samples in the result.
+        fmin: The minimum frequency for which to calculate the frequency response;
+        fmax: The maximum frequency for which to calculate the frequency response;
+        fs: The sampling frequency of the time domain samples in x. If not specified, it is assumed that the fmin and fmax values are already scaled to fs.
+    """
+
+    if fs is not None:
+        fmin /= fs
+        fmax /= fs
+
+    a = np.exp(         fmin            * 2 * np.pi * 1j)  # first frequency
+    w = np.exp(-(fmax - fmin) / (m - 1) * 2 * np.pi * 1j)  # frequency step
 
     return czt(x, m, w, a)
