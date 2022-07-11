@@ -46,3 +46,12 @@ def czt(x, m = None, w = None, a = None):
     y = yy * w ** w_exponents_3
 
     return y
+
+
+def czt_range(x, m, fmin, fmax, fs):
+    """Calculate frequency domain samples for a frequency range [fmin .. fmax], assuming a sampling frequency fs."""
+
+    w = np.exp(-(fmax - fmin) / ((m - 1) * fs) * 2 * np.pi * 1j)  # frequency step
+    a = np.exp(         fmin  / (          fs) * 2 * np.pi * 1j)  # first frequency
+
+    return czt(x, m, w, a)
