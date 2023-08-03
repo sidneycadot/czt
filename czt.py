@@ -5,6 +5,8 @@ import numpy as np
 def czt(x, m = None, w = None, a = None):
     """Calculate the Chirp-Z transform of an input vector x.
 
+    Note: An equivalent "czt" function is now available in scipy.signal.czt().
+
     Parameters:
         x: time domain samples.
         m: The number of frequency domain samples in the result.
@@ -59,9 +61,10 @@ def czt_range(x, m, fmin, fmax, fs=None):
     Parameters:
         x: time domain samples.
         m: The number of frequency domain samples in the result.
-        fmin: The minimum frequency for which to calculate the frequency response;
-        fmax: The maximum frequency for which to calculate the frequency response;
-        fs: The sampling frequency of the time domain samples in x. If not specified, it is assumed that the fmin and fmax values are already scaled to fs.
+        fmin: The minimum frequency for which to calculate the frequency response.
+        fmax: The maximum frequency for which to calculate the frequency response.
+        fs: The sampling frequency of the time domain samples in x.
+            If not specified, it is assumed that the fmin and fmax values are already scaled to fs.
     """
 
     if fs is not None:
